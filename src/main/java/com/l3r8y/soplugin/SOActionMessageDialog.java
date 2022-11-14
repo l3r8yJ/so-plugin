@@ -28,7 +28,11 @@ public class SOActionMessageDialog implements MessageDialog {
   private final String message;
 
   public SOActionMessageDialog(final String msg) {
-    this.title = "SO-Plugin";
+    this("SO-Plugin", msg);
+  }
+
+  public SOActionMessageDialog(final String ttl, final String msg) {
+    this.title = ttl;
     this.message = msg;
   }
 
