@@ -26,45 +26,66 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.ui.Messages;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.function.Consumer;
 import org.jetbrains.annotations.NotNull;
-
 
 public class SOAction extends AnAction {
 
+  private static final String PLAIN_TEXT = "plain text";
+
   @Override
   public final void actionPerformed(@NotNull final AnActionEvent evt) {
-    final Optional<Editor> editor = Optional.ofNullable(evt.getData(CommonDataKeys.EDITOR));
     final Optional<Language> lang = Optional.ofNullable(evt.getData(CommonDataKeys.LANGUAGE));
-    editor.ifPresent(edtr-> SOAction.openBrowserIfSelectedCode(lang, edtr));
-  }
-
-  private static void openBrowserIfSelectedCode(final Optional<Language> lang, final Editor edtr) {
-    final String code = edtr.getSelectionModel().getSelectedText();
-    final Optional<String> ext = lang.map(lng -> lng.getDisplayName().toLowerCase(Locale.ROOT));
-    if (ext.isPresent() && null != code) {
-      Messages.showMessageDialog(
-        "Done!",
-        "SO-Plugin",
-        Messages.getInformationIcon()
-      );
-      BrowserUtil.browse(SOAction.buildQuery(code, ext.get()));
-    }
-  }
-
-  private static String buildQuery(final String code, final String ext) {
-    return String.format(
-        "https://stackoverflow.com/search?q=%s",
-        URLEncoder.encode(String.format("%s [%s]", code, ext), StandardCharsets.UTF_8)
-    );
+    Optional.ofNullable(
+      evt.getData(CommonDataKeys.EDITOR)
+    ).ifPresent(editor -> SOAction.openBrowserWhenCodeSelected(lang, editor));
   }
 
   @Override
   public final boolean isDumbAware() {
     return super.isDumbAware();
+  }
+
+  private static void openBrowserWhenCodeSelected(final Optional<Language> lang, final Editor edtr) {
+    final String code = edtr.getSelectionModel().getSelectedText();
+    lang
+      .map(lng -> lng.getDisplayName().toLowerCase(Locale.ROOT))
+      .ifPresent(SOAction.openBrowser(code));
+  }
+
+  private static Consumer<String> openBrowser(final String code) {
+    return language -> {
+      if (SOAction.isLanguageSupported(language) && SOAction.isCodeSelected(code)) {
+        BrowserUtil.browse(SOAction.queryFrom(code, language));
+      }
+    };
+  }
+
+  private static boolean isLanguageSupported(final String lang) {
+    if (SOAction.PLAIN_TEXT.equalsIgnoreCase(lang)) {
+      new SOActionMessageDialog("File extension not supported.").show();
+      return false;
+    }
+    return true;
+  }
+
+  private static boolean isCodeSelected(final String code) {
+    if (null == code) {
+      new SOActionMessageDialog("Code not selected, please do a selection.").show();
+      return false;
+    }
+    new SOActionMessageDialog("Done!").show();
+    return true;
+  }
+
+  private static String queryFrom(final String code, final String ext) {
+    return String.format(
+      "https://stackoverflow.com/search?q=%s",
+      URLEncoder.encode(String.format("%s [%s]", code, ext), StandardCharsets.UTF_8)
+    );
   }
 }
