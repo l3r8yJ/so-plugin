@@ -35,9 +35,9 @@ public class SOActionMessageDialog implements MessageDialog {
   @Override
   public final void show() {
     Messages.showMessageDialog(
-        this.message,
-        this.title,
-        Messages.getInformationIcon()
+      this.message,
+      this.title,
+      Messages.getInformationIcon()
     );
   }
 }

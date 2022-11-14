@@ -20,12 +20,8 @@
 
 package com.l3r8y.soplugin;
 
-/**
- * The message dialog.
- * */
+/** The message dialog. */
 public interface MessageDialog {
-  /**
-   * Showing the dialog.
-   * */
+  /** Showing the dialog. */
   void show();
 }
