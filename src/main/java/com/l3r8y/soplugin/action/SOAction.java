@@ -18,14 +18,16 @@
  * SOFTWARE.
  */
 
-package com.l3r8y.soplugin;
+package com.l3r8y.soplugin.action;
 
 import com.intellij.ide.BrowserUtil;
 import com.intellij.lang.Language;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
+import com.l3r8y.soplugin.message.SOActionMessageDialog;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
@@ -35,6 +37,8 @@ import org.jetbrains.annotations.NotNull;
 
 public class SOAction extends AnAction {
 
+  private static final Logger LOGGER =
+    Logger.getInstance(SOAction.class);
   private static final String PLAIN_TEXT = "plain text";
 
   @Override
@@ -43,6 +47,7 @@ public class SOAction extends AnAction {
     Optional.ofNullable(
       evt.getData(CommonDataKeys.EDITOR)
     ).ifPresent(editor -> SOAction.openBrowserWhenCodeSelected(lang, editor));
+    SOAction.LOGGER.info("actionPerformed() called");
   }
 
   @Override

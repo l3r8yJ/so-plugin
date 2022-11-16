@@ -18,14 +18,9 @@
  * SOFTWARE.
  */
 
-package com.l3r8y.soplugin;
+package com.l3r8y.soplugin.message;
 
 import com.intellij.openapi.ui.Messages;
-import java.nio.file.Paths;
-import java.util.Objects;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.plaf.IconUIResource;
 
 public class SOActionMessageDialog implements MessageDialog {
 

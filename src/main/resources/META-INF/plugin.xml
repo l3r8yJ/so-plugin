@@ -28,7 +28,7 @@
 
   </extensions>
   <actions>
-    <action id="com.l3r8y.soplugin.SOAction" class="com.l3r8y.soplugin.SOAction"
+    <action id="com.l3r8y.soplugin.action.SOAction" class="com.l3r8y.soplugin.action.SOAction"
       text="StackOverflowAction" description="Creates SO question with selected text">
       <keyboard-shortcut keymap="$default" first-keystroke="meta alt QUOTE"/>
     </action>

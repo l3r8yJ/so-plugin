@@ -18,7 +18,7 @@
  * SOFTWARE.
  */
 
-package com.l3r8y.soplugin;
+package com.l3r8y.soplugin.message;
 
 /** The message dialog. */
 public interface MessageDialog {
